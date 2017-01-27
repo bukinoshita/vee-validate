@@ -40,6 +40,10 @@ export default class Validator
      * @param  {function|object} validator The validator object.
      */
     static _merge(name, validator) {
+        if (Rules[name]) {
+            return;
+        }
+
         if (typeof validator === 'function') {
             Rules[name] = validator;
             dictionary.setMessage('en', name, (field) => `The ${field} value is not valid.`);
@@ -75,12 +79,6 @@ export default class Validator
      * @param  {object} validator a validation rule object.
      */
     static _guardExtend(name, validator) {
-        if (Rules[name]) {
-            throw new ValidatorException(
-                `Extension Error: There is an existing validator with the same name '${name}'.`
-            );
-        }
-
         if (typeof validator === 'function') {
             return;
         }
